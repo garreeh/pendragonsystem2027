@@ -63,7 +63,7 @@ if (isset($_SESSION['user_id'])) {
               <input type="text" class="form-control" id="floating-name" name="full_name" placeholder="Jane Doe"
                 autocomplete="username" required>
 
-              <label for="floating-name">Username / Email</label>
+              <label for="floating-name">Username</label>
             </div>
 
             <!-- Password -->

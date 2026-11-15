@@ -26,10 +26,8 @@ include './../controllers/count_user_dashboard.php';
 
   <title><?php echo $page_title; ?></title>
 
-  <!-- TABLER CSS -->
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/tabler.min.css">
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/tabler-icons.min.css">
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/static.css">
+  <?php include './../includes/css_upper.php'; ?>
+
 </head>
 
 <body>
@@ -136,9 +134,11 @@ include './../controllers/count_user_dashboard.php';
 
   </div>
 
-  <!-- TABLER JAVASCRIPT -->
-  <script src="/pendragonsystem2027/assets/js/tabler.min.js"></script>
+  <?php include './../includes/js_lower.php'; ?>
+  <!-- </?php include './../includes/idle.php'; ?> -->
 
 </body>
 
 </html>
+
+<

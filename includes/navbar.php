@@ -1,3 +1,12 @@
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+
+function isActive($pages, $current_page)
+{
+  return in_array($current_page, (array) $pages) ? 'active' : '';
+}
+?>
+
 <header class="navbar navbar-expand-xxl d-print-none main-navbar">
   <div class="container-fluid">
 
@@ -32,19 +41,19 @@
 
         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
-          <a href="profile.php" class="dropdown-item">
+          <a href="profile.php" class="dropdown-item <?php echo isActive('profile.php', $current_page); ?>">
             <i class="ti ti-user me-2"></i>
             Profile
           </a>
 
-          <a href="feedback.php" class="dropdown-item">
+          <a href="feedback.php" class="dropdown-item <?php echo isActive('feedback.php', $current_page); ?>">
             <i class="ti ti-message-circle me-2"></i>
             Feedback
           </a>
 
           <div class="dropdown-divider"></div>
 
-          <a href="settings.php" class="dropdown-item">
+          <a href="settings.php" class="dropdown-item <?php echo isActive('settings.php', $current_page); ?>">
             <i class="ti ti-settings me-2"></i>
             Settings
           </a>
@@ -61,160 +70,204 @@
     <!-- NAVIGATION MENU -->
     <div class="collapse navbar-collapse" id="navbar-menu">
 
-      <ul class="navbar-nav">
+      <ul class="navbar-nav nav-pills">
 
         <!-- DASHBOARD -->
         <li class="nav-item">
-          <a class="nav-link active" href="dashboard.php">
+          <a class="nav-link <?php echo isActive('dashboard.php', $current_page); ?>" href="dashboard.php">
+
             <span class="nav-link-icon">
               <i class="ti ti-dashboard"></i>
             </span>
+
             <span class="nav-link-title">Dashboard</span>
           </a>
         </li>
 
         <!-- CASE -->
         <li class="nav-item">
-          <a class="nav-link" href="case.php">
+          <a class="nav-link <?php echo isActive('case.php', $current_page); ?>" href="case.php">
+
             <span class="nav-link-icon">
               <i class="ti ti-folder"></i>
             </span>
+
             <span class="nav-link-title">Case</span>
           </a>
         </li>
 
         <!-- CLIENTS -->
         <li class="nav-item">
-          <a class="nav-link" href="client.php">
+          <a class="nav-link <?php echo isActive('client.php', $current_page); ?>" href="client.php">
+
             <span class="nav-link-icon">
               <i class="ti ti-users"></i>
             </span>
+
             <span class="nav-link-title">Clients</span>
           </a>
         </li>
 
         <!-- PATIENT -->
         <li class="nav-item">
-          <a class="nav-link" href="patient.php">
+          <a class="nav-link <?php echo isActive('patient.php', $current_page); ?>" href="patient.php">
+
             <span class="nav-link-icon">
               <i class="ti ti-paw"></i>
             </span>
+
             <span class="nav-link-title">Patient</span>
           </a>
         </li>
 
         <!-- BILLING -->
         <li class="nav-item">
-          <a class="nav-link" href="billing.php">
+          <a class="nav-link <?php echo isActive('billing.php', $current_page); ?>" href="billing.php">
+
             <span class="nav-link-icon">
               <i class="ti ti-receipt"></i>
             </span>
+
             <span class="nav-link-title">Billing</span>
           </a>
         </li>
 
         <!-- PURCHASE ORDER -->
         <li class="nav-item">
-          <a class="nav-link" href="purchase_order.php">
+          <a class="nav-link <?php echo isActive('purchase_order.php', $current_page); ?>" href="purchase_order.php">
+
             <span class="nav-link-icon">
               <i class="ti ti-shopping-cart"></i>
             </span>
+
             <span class="nav-link-title">Purchase Order</span>
           </a>
         </li>
 
         <!-- MED PATHWAY -->
         <li class="nav-item">
-          <a class="nav-link" href="med_pathway.php">
+          <a class="nav-link <?php echo isActive('med_pathway.php', $current_page); ?>" href="med_pathway.php">
+
             <span class="nav-link-icon">
               <i class="ti ti-heartbeat"></i>
             </span>
+
             <span class="nav-link-title">Med Pathway</span>
           </a>
         </li>
 
         <!-- REPORT -->
         <li class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+
+          <a href="#" class="nav-link dropdown-toggle <?php echo isActive(
+            array('case_report.php', 'patient_report.php', 'billing_report.php'),
+            $current_page
+          ); ?>" data-bs-toggle="dropdown" aria-expanded="false">
+
             <span class="nav-link-icon">
               <i class="ti ti-chart-bar"></i>
             </span>
+
             <span class="nav-link-title">Report</span>
           </a>
 
           <div class="dropdown-menu">
-            <a href="case_report.php" class="dropdown-item">
+
+            <a href="case_report.php" class="dropdown-item <?php echo isActive('case_report.php', $current_page); ?>">
               <i class="ti ti-file-text me-2"></i>
               Case Report
             </a>
 
-            <a href="patient_report.php" class="dropdown-item">
+            <a href="patient_report.php"
+              class="dropdown-item <?php echo isActive('patient_report.php', $current_page); ?>">
               <i class="ti ti-users me-2"></i>
               Patient Report
             </a>
 
-            <a href="billing_report.php" class="dropdown-item">
+            <a href="billing_report.php"
+              class="dropdown-item <?php echo isActive('billing_report.php', $current_page); ?>">
               <i class="ti ti-report-money me-2"></i>
               Billing Report
             </a>
+
           </div>
         </li>
 
         <!-- USER -->
         <li class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+
+          <a href="#" class="nav-link dropdown-toggle <?php echo isActive(
+            array('users.php', 'user_roles.php'),
+            $current_page
+          ); ?>" data-bs-toggle="dropdown" aria-expanded="false">
+
             <span class="nav-link-icon">
               <i class="ti ti-user-cog"></i>
             </span>
+
             <span class="nav-link-title">User</span>
           </a>
 
           <div class="dropdown-menu">
-            <a href="users.php" class="dropdown-item">
+
+            <a href="users.php" class="dropdown-item <?php echo isActive('users.php', $current_page); ?>">
               <i class="ti ti-users me-2"></i>
               User Management
             </a>
 
-            <a href="user_roles.php" class="dropdown-item">
+            <a href="user_roles.php" class="dropdown-item <?php echo isActive('user_roles.php', $current_page); ?>">
               <i class="ti ti-shield-lock me-2"></i>
               User Roles Management
             </a>
+
           </div>
         </li>
 
         <!-- SETUP -->
         <li class="nav-item dropdown">
-          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+
+          <a href="#" class="nav-link dropdown-toggle <?php echo isActive(
+            array('general_settings.php', 'categories.php', 'system_settings.php'),
+            $current_page
+          ); ?>" data-bs-toggle="dropdown" aria-expanded="false">
+
             <span class="nav-link-icon">
               <i class="ti ti-settings"></i>
             </span>
+
             <span class="nav-link-title">Setup</span>
           </a>
 
           <div class="dropdown-menu">
-            <a href="general_settings.php" class="dropdown-item">
+
+            <a href="general_settings.php"
+              class="dropdown-item <?php echo isActive('general_settings.php', $current_page); ?>">
               <i class="ti ti-adjustments me-2"></i>
               General Settings
             </a>
 
-            <a href="categories.php" class="dropdown-item">
+            <a href="categories.php" class="dropdown-item <?php echo isActive('categories.php', $current_page); ?>">
               <i class="ti ti-category me-2"></i>
               Categories
             </a>
 
-            <a href="system_settings.php" class="dropdown-item">
+            <a href="system_settings.php"
+              class="dropdown-item <?php echo isActive('system_settings.php', $current_page); ?>">
               <i class="ti ti-tool me-2"></i>
               System Settings
             </a>
+
           </div>
         </li>
 
         <!-- SMS -->
         <li class="nav-item">
-          <a class="nav-link" href="sms.php">
+          <a class="nav-link <?php echo isActive('sms.php', $current_page); ?>" href="sms.php">
+
             <span class="nav-link-icon">
               <i class="ti ti-message"></i>
             </span>
+
             <span class="nav-link-title">SMS</span>
           </a>
         </li>
@@ -227,10 +280,9 @@
   </div>
 </header>
 
-<!-- TABLER JAVASCRIPT -->
-<!-- <script src="assets/js/tabler.min.js"></script> -->
+<?php include './../modals/modal_idle_user.php' ?>
 
-<!-- Protect Pages when not logged in -->
+<!-- PROTECT PAGES WHEN NOT LOGGED IN -->
 <script>
   window.addEventListener("pageshow", function (event) {
     if (event.persisted) {
