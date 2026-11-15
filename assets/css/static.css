@@ -1,0 +1,121 @@
+/* For Navigation */
+.main-navbar .container-fluid {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.main-navbar .navbar-brand {
+  white-space: nowrap;
+  margin-right: 12px;
+}
+
+.main-navbar .navbar-nav .nav-link {
+  gap: 4px;
+}
+
+.main-navbar .nav-link-icon {
+  margin-right: 0 !important;
+  min-width: 18px;
+}
+
+.main-navbar .nav-link-icon i {
+  font-size: 15px;
+}
+
+.main-navbar .nav-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-navbar .nav-link-icon i {
+  font-size: 16px;
+}
+
+/* DESKTOP NAVIGATION */
+@media (min-width: 1400px) {
+  .main-navbar .navbar-collapse {
+    flex-grow: 1;
+  }
+
+  .main-navbar .navbar-nav {
+    gap: 2px;
+  }
+}
+
+/* TABLET AND MOBILE NAVIGATION */
+@media (max-width: 1399.98px) {
+  .main-navbar .navbar-collapse {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .main-navbar .navbar-collapse.show {
+    display: block;
+  }
+
+  .main-navbar .navbar-collapse.collapsing {
+    overflow: hidden;
+  }
+
+  .main-navbar .navbar-collapse .navbar-nav {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .main-navbar .navbar-collapse .nav-link {
+    padding: 10px 12px;
+  }
+
+  .main-navbar .navbar-collapse .dropdown-menu {
+    margin-left: 30px;
+  }
+
+  .main-navbar .navbar-collapse {
+    max-height: calc(100vh - 75px);
+    overflow-y: auto;
+  }
+}
+
+/* SMALL MOBILE */
+@media (max-width: 575.98px) {
+  .main-navbar .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .main-navbar .navbar-brand {
+    font-size: 16px;
+    margin-right: 5px;
+  }
+
+  .main-navbar .navbar-brand i {
+    font-size: 22px !important;
+    margin-right: 5px !important;
+  }
+
+  .main-navbar .navbar-toggler {
+    padding: 5px 8px;
+  }
+}
+
+/* End of Navigation */
+
+/* For Logo */
+.brand-logo {
+    width: 15rem;
+    height: 50px;
+    background-color: #6d9cdb;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+.brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+/* End of Logo */

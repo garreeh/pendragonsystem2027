@@ -1,0 +1,67 @@
+/* For Login */
+.login-card {
+    width: 100%;
+    max-width: 700px;
+    overflow: hidden;
+    border-radius: 14px;
+}
+
+.login-card-header {
+    background-color: #6d9cdb;
+    padding: 20px 15px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card .card-body {
+    padding: 25px;
+}
+/* End For Login */
+
+/* For Password Toggle */
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    z-index: 5;
+    border: none;
+    background: transparent;
+    color: #626976;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.password-input {
+    padding-right: 45px !important;
+}
+/* End For Password Toggle */
+
+/* For Logo */
+.brand-logo-login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15rem;
+    height: 55px;
+    padding: 5px;
+}
+
+.brand-logo-login img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+/* End For Logo */
+
+/* Uncomment these for editing the width of toastr */
+
+/* #toast-container > .toast {
+    width: 350px !important;
+    max-width: 90vw;
+} */
