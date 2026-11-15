@@ -11,11 +11,51 @@
 
         <div class="modal-body">
 
+
           <div class="mb-4">
             <label class="form-label">User Type Name</label>
             <input type="text" class="form-control" name="user_type_name"
               placeholder="E.g. Administrator, Veterinarian, Receptionist" required>
           </div>
+
+          <div class="row">
+            <!-- Case Doctor -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Case Doctor</label>
+                <select class="form-select" name="case_doctor">
+                  <option value="enabled" selected>Enabled</option>
+                  <option value="disabled">Disabled</option>
+                </select>
+                <small class="form-hint">
+                  Enable or disable case doctor access for this user type.
+                </small>
+              </div>
+            </div>
+
+            <!-- Discount -->
+
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Discount (%)</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" name="billing_discount_percentage" placeholder="E.g. 10"
+                    maxlength="3" inputmode="numeric" oninput="
+          this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3);
+          if (this.value !== '' && parseInt(this.value, 10) > 100) {
+            this.value = '100';
+          }
+        " pattern="^(100|[1-9][0-9]?)$" title="Enter a discount percentage between 1 and 100." required>
+                  <span class="input-group-text">%</span>
+                </div>
+                <small class="form-hint">
+                  Enter a discount percentage between 1% and 100%.
+                </small>
+              </div>
+            </div>
+
+          </div>
+
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0"><i class="ti ti-shield-lock me-2"></i>User Permissions</h4>
@@ -117,11 +157,6 @@
                   <h4 class="card-title mb-0"><i class="ti ti-clipboard-list me-2"></i>Case Management</h4>
                 </div>
                 <div class="card-body">
-                  <div class="form-check mb-2">
-                    <input class="form-check-input permission-checkbox" type="checkbox" name="case_doctor" value="1"
-                      id="case_doctor">
-                    <label class="form-check-label" for="case_doctor">Case Doctor</label>
-                  </div>
                   <div class="form-check mb-2">
                     <input class="form-check-input permission-checkbox" type="checkbox" name="case_add" value="1"
                       id="case_add">
@@ -250,11 +285,6 @@
                     <input class="form-check-input permission-checkbox" type="checkbox" name="billing_add" value="1"
                       id="billing_add">
                     <label class="form-check-label" for="billing_add">Add Billing</label>
-                  </div>
-                  <div class="form-check mb-2">
-                    <input class="form-check-input permission-checkbox" type="checkbox"
-                      name="billing_discount_percentage" value="1" id="billing_discount_percentage">
-                    <label class="form-check-label" for="billing_discount_percentage">Discount Percentage</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input permission-checkbox" type="checkbox" name="billing_discount_check"

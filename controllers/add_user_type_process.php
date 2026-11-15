@@ -47,8 +47,41 @@ if ($check->num_rows > 0) {
   exit;
 }
 
+// Get Case Doctor status
+$case_doctor = isset($_POST['case_doctor'])
+  ? strtolower(trim($_POST['case_doctor']))
+  : '';
+
+if (!in_array($case_doctor, ['enabled', 'disabled'], true)) {
+  echo json_encode([
+    'success' => false,
+    'message' => 'Invalid Case Doctor status.'
+  ]);
+  exit;
+}
+
+$case_doctor = $conn->real_escape_string($case_doctor);
+
+// Get Billing Discount Percentage
+$billing_discount_percentage = isset($_POST['billing_discount_percentage'])
+  ? trim($_POST['billing_discount_percentage'])
+  : '';
+
+if (!preg_match('/^(100|[1-9][0-9]?)$/', $billing_discount_percentage)) {
+  echo json_encode([
+    'success' => false,
+    'message' => 'Discount must be between 1 and 100.'
+  ]);
+  exit;
+}
+
+$billing_discount_percentage = $conn->real_escape_string(
+  $billing_discount_percentage
+);
+
 // All permission fields from the Add User Type form
 $permission_fields = [
+
   // Client
   'list_client',
   'client_add',
@@ -64,7 +97,6 @@ $permission_fields = [
   'patient_delete',
 
   // Case
-  'case_doctor',
   'case_add',
   'list_case',
   'case_edit',
@@ -90,7 +122,6 @@ $permission_fields = [
   'billing_view',
   'list_billing',
   'billing_add',
-  'billing_discount_percentage',
   'billing_discount_check',
 
   // Inventory
@@ -205,11 +236,12 @@ $permission_fields = [
   'sms_sending_view'
 ];
 
-// Build permission values
+// Build permission columns and values
 $columns = [];
 $values = [];
 
 foreach ($permission_fields as $field) {
+
   $columns[] = "`$field`";
 
   // Checked = 1, unchecked = 0
@@ -221,9 +253,17 @@ foreach ($permission_fields as $field) {
   $values[] = $value;
 }
 
-// Add user type name to the beginning
+// Add user type name
 array_unshift($columns, '`user_type_name`');
 array_unshift($values, "'$user_type_name'");
+
+// Add Case Doctor separately
+$columns[] = '`case_doctor`';
+$values[] = "'$case_doctor'";
+
+// Add Billing Discount Percentage separately
+$columns[] = '`billing_discount_percentage`';
+$values[] = "'$billing_discount_percentage'";
 
 // Build INSERT query
 $sql = "
@@ -236,15 +276,19 @@ $sql = "
 
 // Execute query
 if ($conn->query($sql)) {
+
   echo json_encode([
     'success' => true,
     'message' => 'User type successfully added.'
   ]);
+
 } else {
+
   echo json_encode([
     'success' => false,
     'message' => 'Failed to add user type: ' . $conn->error
   ]);
+
 }
 
 $conn->close();

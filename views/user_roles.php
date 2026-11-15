@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
   exit();
 }
 
-$page_title = 'User Roles Management';
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +19,10 @@ $page_title = 'User Roles Management';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title><?php echo $page_title ?? 'User Roles'; ?></title>
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/pendragonsystem2027/views/ico.jpg">
+
+  <title>User Roles Management'</title>
 
   <!-- TABLER CSS -->
   <link rel="stylesheet" href="/pendragonsystem2027/assets/css/tabler.min.css">
@@ -129,26 +131,28 @@ $page_title = 'User Roles Management';
                         <td>
                           <?php if ($case_doctor == 'enabled') { ?>
                             <span class="badge bg-success-lt">
-                              Active
+                              Enabled
                             </span>
 
                           <?php } else { ?>
                             <span class="badge bg-danger-lt">
-                              Inactive
+                              Disabled
                             </span>
                           <?php } ?>
                         </td>
 
                         <td class="text-center">
-                          <button type="button" class="btn btn-sm btn-outline-primary">
+                          <button type="button" class="btn btn-sm btn-outline-primary btn-edit-user"
+                            data-user-type-id="<?php echo htmlspecialchars($row['user_type_id']); ?>">
+
                             <i class="ti ti-edit me-1"></i>
                             Edit
                           </button>
 
-                          <button type="button" class="btn btn-sm btn-outline-danger">
+                          <!-- <button type="button" class="btn btn-sm btn-outline-danger">
                             <i class="ti ti-trash me-1"></i>
                             Delete
-                          </button>
+                          </button> -->
                         </td>
 
                       </tr>
@@ -192,9 +196,10 @@ $page_title = 'User Roles Management';
 
   <!-- DATATABLES RESPONSIVE -->
   <script src="/pendragonsystem2027/assets/js/dataTables.responsive.min.js"></script>
-  <script src="/pendragonsystem2027/assets/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+  <script src="/pendragonsystem2027/assets/js/responsive.bootstrap5.min.js"></script>
 
   <?php include './../modals/user_type/modal_add_user_type.php'; ?>
+  <?php include './../modals/user_type/modal_edit_user_type.php'; ?>
 
   <!-- DATATABLES INITIALIZATION -->
   <script>
@@ -213,13 +218,41 @@ $page_title = 'User Roles Management';
 
         language: {
           search: "",
-          searchPlaceholder: "Search users...",
-          emptyTable: "No users available | Try adding a new user.",
-          zeroRecords: "No matching users found"
+          searchPlaceholder: "Search user roles...",
+          emptyTable: "No user roles available | Try adding a new user role.",
+          zeroRecords: "No matching user roles found"
         }
 
       });
 
+    });
+
+    // LOAD EDIT USER MODAL
+    $(document).on('click', '.btn-edit-user', function () {
+
+      var userTypeId = $(this).data('user-type-id');
+      // console.log('Clicked Edit - User Type ID:', userTypeId);
+      $.ajax({
+        url: './../modals/user_type/modal_edit_user_type.php',
+        type: 'POST',
+        data: {
+          user_type_id: userTypeId
+        },
+
+        success: function (response) {
+          // console.log('Modal loaded for User Type ID:', userTypeId);
+          $('#editUserModal').remove();
+          $('body').append(response);
+          $('#editUserModal').modal('show');
+
+        },
+
+        error: function (xhr) {
+          console.log('AJAX Error:', xhr.status);
+          console.log(xhr.responseText);
+          toastr.error('Unable to load user role details.');
+        }
+      });
     });
   </script>
 

@@ -83,11 +83,21 @@
           </a>
         </li>
 
+        <!-- CLIENTS -->
+        <li class="nav-item">
+          <a class="nav-link" href="client.php">
+            <span class="nav-link-icon">
+              <i class="ti ti-users"></i>
+            </span>
+            <span class="nav-link-title">Clients</span>
+          </a>
+        </li>
+
         <!-- PATIENT -->
         <li class="nav-item">
           <a class="nav-link" href="patient.php">
             <span class="nav-link-icon">
-              <i class="ti ti-users"></i>
+              <i class="ti ti-paw"></i>
             </span>
             <span class="nav-link-title">Patient</span>
           </a>

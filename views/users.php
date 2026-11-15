@@ -10,7 +10,6 @@ if (!isset($_SESSION['user_id'])) {
   exit();
 }
 
-$page_title = 'Users';
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +19,10 @@ $page_title = 'Users';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title><?php echo $page_title ?? 'Users'; ?></title>
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/pendragonsystem2027/views/ico.jpg">
+
+  <title>Users Management</title>
 
   <!-- TABLER CSS -->
   <link rel="stylesheet" href="/pendragonsystem2027/assets/css/tabler.min.css">
@@ -152,8 +154,8 @@ $page_title = 'Users';
                           </button>
 
                           <button type="button" class="btn btn-sm btn-outline-danger">
-                            <i class="ti ti-trash me-1"></i>
-                            Delete
+                            <i class="ti ti-lock me-1"></i>
+                            Lock
                           </button>
                         </td>
 
