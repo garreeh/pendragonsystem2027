@@ -1,5 +1,5 @@
 <?php
-$page_title = 'Dashboard';
+$page_title = 'Pendragon Dashboard';
 
 // USER STATISTICS
 $total_users = 0;

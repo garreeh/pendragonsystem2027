@@ -177,7 +177,7 @@
 
             <a href="user_roles.php" class="dropdown-item">
               <i class="ti ti-shield-lock me-2"></i>
-              User Roles
+              User Roles Management
             </a>
           </div>
         </li>

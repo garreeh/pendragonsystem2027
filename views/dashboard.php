@@ -22,6 +22,8 @@ include './../controllers/count_user_dashboard.php';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="icon" type="image/png" href="/pendragonsystem2027/views/ico.jpg">
+
   <title><?php echo $page_title; ?></title>
 
   <!-- TABLER CSS -->

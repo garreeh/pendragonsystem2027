@@ -20,6 +20,8 @@ if (isset($_SESSION['user_id'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <link rel="icon" type="image/png" href="/pendragonsystem2027/views/ico.jpg">
+
   <title><?php echo $page_title ?? 'Pendragon System Login'; ?></title>
 
   <link rel="stylesheet" href="assets/css/tabler.min.css">

@@ -22,21 +22,10 @@ if (!isset($_SESSION['user_id'])) {
   <!-- FAVICON -->
   <link rel="icon" type="image/png" href="/pendragonsystem2027/views/ico.jpg">
 
-  <title>User Roles Management'</title>
+  <title>User Roles Management</title>
 
-  <!-- TABLER CSS -->
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/tabler.min.css">
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/tabler-icons.min.css">
-
-  <!-- TOASTR CSS -->
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/toastr.min.css">
-
-  <!-- DATATABLES CSS -->
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/responsive.bootstrap5.min.css">
-
-  <!-- CUSTOM CSS -->
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/static.css">
+  <!-- ALL CSS -->
+  <?php include './../includes/css_upper.php'; ?>
 
 </head>
 
@@ -67,7 +56,7 @@ if (!isset($_SESSION['user_id'])) {
           </div>
 
           <div class="col-auto ms-auto">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserTypeModal">
 
               <i class="ti ti-plus me-1"></i>
               Add Role
@@ -97,7 +86,7 @@ if (!isset($_SESSION['user_id'])) {
 
             <div class="table-responsive">
 
-              <table id="usersTable" class="table table-vcenter table-striped">
+              <table id="usersTypeTable" class="table table-vcenter table-striped">
 
                 <thead>
                   <tr>
@@ -180,32 +169,15 @@ if (!isset($_SESSION['user_id'])) {
 
   </div>
 
-
-  <!-- JQUERY -->
-  <script src="/pendragonsystem2027/assets/js/jquery.min.js"></script>
-
-  <!-- TABLER JAVASCRIPT -->
-  <script src="/pendragonsystem2027/assets/js/tabler.min.js"></script>
-
-  <!-- TOASTR JAVASCRIPT -->
-  <script src="/pendragonsystem2027/assets/js/toastr.min.js"></script>
-
-  <!-- DATATABLES JAVASCRIPT -->
-  <script src="/pendragonsystem2027/assets/js/dataTables.min.js"></script>
-  <script src="/pendragonsystem2027/assets/js/dataTables.bootstrap5.min.js"></script>
-
-  <!-- DATATABLES RESPONSIVE -->
-  <script src="/pendragonsystem2027/assets/js/dataTables.responsive.min.js"></script>
-  <script src="/pendragonsystem2027/assets/js/responsive.bootstrap5.min.js"></script>
+  <!-- All JavaScript -->
+  <?php include './../includes/js_lower.php'; ?>
 
   <?php include './../modals/user_type/modal_add_user_type.php'; ?>
-  <?php include './../modals/user_type/modal_edit_user_type.php'; ?>
-
   <!-- DATATABLES INITIALIZATION -->
   <script>
     $(document).ready(function () {
 
-      $('#usersTable').DataTable({
+      $('#usersTypeTable').DataTable({
 
         responsive: true,
         pageLength: 10,
@@ -227,7 +199,7 @@ if (!isset($_SESSION['user_id'])) {
 
     });
 
-    // LOAD EDIT USER MODAL
+    // LOAD EDIT USER TYPE MODAL
     $(document).on('click', '.btn-edit-user', function () {
 
       var userTypeId = $(this).data('user-type-id');
@@ -241,9 +213,9 @@ if (!isset($_SESSION['user_id'])) {
 
         success: function (response) {
           // console.log('Modal loaded for User Type ID:', userTypeId);
-          $('#editUserModal').remove();
+          $('#editUserTypeModal').remove();
           $('body').append(response);
-          $('#editUserModal').modal('show');
+          $('#editUserTypeModal').modal('show');
 
         },
 

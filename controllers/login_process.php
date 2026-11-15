@@ -39,6 +39,18 @@ if ($result && $result->num_rows > 0) {
 
   $row = $result->fetch_assoc();
 
+  // Check user account status
+  if ($row['user_status'] !== 'enabled') {
+    echo json_encode([
+      'success' => false,
+      'message' => 'Your account is currently inactive. Please contact your administrator to activate your account before logging in.'
+    ]);
+
+    $conn->close();
+    exit;
+  }
+
+  // Regenerate session ID
   session_regenerate_id(true);
 
   $_SESSION['user_id'] = htmlentities($row['user_id']);
@@ -48,6 +60,7 @@ if ($result && $result->num_rows > 0) {
   $_SESSION['user_lastname'] = htmlentities($row['user_lastname']);
   $_SESSION['user_status'] = htmlentities($row['user_status']);
 
+  // Remember Me
   if (!empty($_POST['remember'])) {
     setcookie("user_name", $user1, time() + (10 * 365 * 24 * 60 * 60), "/");
     setcookie("user_password", $password, time() + (10 * 365 * 24 * 60 * 60), "/");

@@ -1,4 +1,4 @@
-<div class="modal modal-blur fade" id="addUserModal" tabindex="-1" aria-hidden="true">
+<div class="modal modal-blur fade" id="addUserTypeModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
 
@@ -7,7 +7,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <form id="addUserForm" method="POST" enctype="multipart/form-data">
+      <form id="addUserTypeForm" method="POST" enctype="multipart/form-data">
 
         <div class="modal-body">
 
@@ -885,10 +885,10 @@
       timeOut: 3000
     };
 
-    $('#addUserForm').on('submit', function (e) {
+    $('#addUserTypeForm').on('submit', function (e) {
       e.preventDefault();
 
-      const btn = $('#addUserModal').find('button[type="submit"]');
+      const btn = $('#addUserTypeModal').find('button[type="submit"]');
       const originalText = btn.html();
 
       btn.prop('disabled', true);
@@ -907,14 +907,14 @@
             toastr.success(response.message);
 
             // Reset form
-            $('#addUserForm')[0].reset();
+            $('#addUserTypeForm')[0].reset();
 
             // Close modal
-            $('#addUserModal').modal('hide');
+            $('#addUserTypeModal').modal('hide');
 
             // Refresh table only
-            $('#usersTable').load(
-              window.location.href + ' #usersTable',
+            $('#usersTypeTable').load(
+              window.location.href + ' #usersTypeTable',
               function () {
                 console.log('Users table updated successfully.');
               }

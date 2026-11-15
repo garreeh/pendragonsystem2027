@@ -24,16 +24,8 @@ if (!isset($_SESSION['user_id'])) {
 
   <title>Users Management</title>
 
-  <!-- TABLER CSS -->
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/tabler.min.css">
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/tabler-icons.min.css">
-
-  <!-- DATATABLES CSS -->
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/responsive.bootstrap5.min.css">
-
-  <!-- CUSTOM CSS -->
-  <link rel="stylesheet" href="/pendragonsystem2027/assets/css/static.css">
+  <!-- ALL THE CSS -->
+  <?php include './../includes/css_upper.php'; ?>
 
 </head>
 
@@ -43,7 +35,6 @@ if (!isset($_SESSION['user_id'])) {
   <?php include './../includes/navbar.php'; ?>
 
   <!-- Modal Add User -->
-  <?php include './../modals/users/modal_add_users.php'; ?>
 
   <!-- PAGE WRAPPER -->
   <div class="page-wrapper">
@@ -142,20 +133,31 @@ if (!isset($_SESSION['user_id'])) {
 
                           <?php } else { ?>
                             <span class="badge bg-danger-lt">
-                              Inactive
+                              Locked
                             </span>
                           <?php } ?>
                         </td>
 
                         <td class="text-center">
-                          <button type="button" class="btn btn-sm btn-outline-primary">
+                          <button type="button" class="btn btn-sm btn-outline-primary btn-edit-user"
+                            data-user-id="<?php echo htmlspecialchars($row['user_id']); ?>">
+
                             <i class="ti ti-edit me-1"></i>
                             Edit
                           </button>
 
-                          <button type="button" class="btn btn-sm btn-outline-danger">
-                            <i class="ti ti-lock me-1"></i>
-                            Lock
+                          <button type="button" class="btn btn-sm btn-outline-danger btn-lock-user" style="width: 90px;"
+                            data-user-id="<?php echo htmlspecialchars($row['user_id']); ?>"
+                            data-user-status="<?php echo htmlspecialchars($user_status); ?>">
+
+                            <?php if ($user_status == 'enabled') { ?>
+                              <i class="ti ti-lock me-1"></i>
+                              Lock
+                            <?php } else { ?>
+                              <i class="ti ti-lock-open me-1"></i>
+                              Unlock
+                            <?php } ?>
+
                           </button>
                         </td>
 
@@ -184,28 +186,23 @@ if (!isset($_SESSION['user_id'])) {
 
   </div>
 
+  <!-- All JavaScript -->
+  <?php include './../includes/js_lower.php'; ?>
 
-  <!-- JQUERY -->
-  <script src="/pendragonsystem2027/assets/js/jquery.min.js"></script>
-
-  <!-- TABLER JAVASCRIPT -->
-  <script src="/pendragonsystem2027/assets/js/tabler.min.js"></script>
-
-  <!-- DATATABLES JAVASCRIPT -->
-  <script src="/pendragonsystem2027/assets/js/dataTables.min.js"></script>
-  <script src="/pendragonsystem2027/assets/js/dataTables.bootstrap5.min.js"></script>
-
-  <!-- DATATABLES RESPONSIVE -->
-  <script src="/pendragonsystem2027/assets/js/dataTables.responsive.min.js"></script>
-  <script src="/pendragonsystem2027/assets/js/responsive.bootstrap5.min.js"></script>
-
+  <?php include './../modals/users/modal_add_users.php'; ?>
 
   <!-- DATATABLES INITIALIZATION -->
   <script>
+    // Selectize Initialization
     $(document).ready(function () {
+      $('select').selectize({
+        sortField: 'text'
+      });
+    });
 
+    // DataTables Initialization
+    $(document).ready(function () {
       $('#usersTable').DataTable({
-
         responsive: true,
         pageLength: 10,
         lengthMenu: [5, 10, 25, 50, 100],
@@ -224,6 +221,71 @@ if (!isset($_SESSION['user_id'])) {
 
       });
 
+    });
+
+    // LOAD EDIT USER MODAL
+    $(document).on('click', '.btn-edit-user', function () {
+
+      var userId = $(this).data('user-id');
+      $.ajax({
+        url: './../modals/users/modal_edit_users.php',
+        type: 'POST',
+        data: {
+          user_id: userId
+        },
+
+        success: function (response) {
+          // console.log('Modal loaded for User Type ID:', userId);
+          $('#editUserModal').remove();
+          $('body').append(response);
+
+          // Initialize Selectize for the edit user modal
+          $('select').selectize({
+            sortField: 'text'
+          });
+
+          $('#editUserModal').modal('show');
+
+        },
+
+        error: function (xhr) {
+          console.log('AJAX Error:', xhr.status);
+          console.log(xhr.responseText);
+          toastr.error('Unable to load user role details.');
+        }
+      });
+    });
+
+    // LOCK USER ACCOUNT
+    $(document).on('click', '.btn-lock-user', function () {
+
+      var userId = $(this).data('user-id');
+      $.ajax({
+        url: './../modals/users/modal_status_user.php',
+        type: 'POST',
+        data: {
+          user_id: userId
+        },
+
+        success: function (response) {
+          // console.log('Modal loaded for User Type ID:', userId);
+          $('#lockUserModal').remove();
+          $('body').append(response);
+
+          // Initialize Selectize for the lock user modal
+          $('select').selectize({
+            sortField: 'text'
+          });
+          $('#lockUserModal').modal('show');
+
+        },
+
+        error: function (xhr) {
+          console.log('AJAX Error:', xhr.status);
+          console.log(xhr.responseText);
+          toastr.error('Unable to load user role details.');
+        }
+      });
     });
   </script>
 

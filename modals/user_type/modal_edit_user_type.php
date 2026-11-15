@@ -1,4 +1,3 @@
-
 <?php
 include __DIR__ . '/../../connections/connections.php';
 
@@ -261,344 +260,312 @@ if (isset($_POST['user_type_id'])) {
             )
 
         );
-?>
+        ?>
 
-<div class="modal modal-blur fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal modal-blur fade" id="editUserTypeModal" tabindex="-1" aria-hidden="true">
 
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
 
-        <div class="modal-content">
+                <div class="modal-content">
 
-            <div class="modal-header">
-                <h5 class="modal-title">Edit User Type</h5>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit User Type</h5>
 
-                <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close">
-                </button>
-            </div>
-
-            <form id="editUserForm" method="POST">
-
-                <div class="modal-body">
-
-                    <input type="hidden"
-                        name="user_type_id"
-                        id="edit_user_type_id"
-                        value="<?php echo htmlspecialchars($row['user_type_id']); ?>">
-
-                    <!-- User Type Name -->
-                    <div class="mb-4">
-
-                        <label class="form-label">User Type Name</label>
-
-                        <input type="text"
-                            class="form-control"
-                            name="user_type_name"
-                            id="edit_user_type_name"
-                            placeholder="E.g. Administrator, Veterinarian, Receptionist"
-                            value="<?php echo htmlspecialchars($row['user_type_name']); ?>"
-                            required>
-
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
                     </div>
 
-                    <div class="row">
+                    <form id="editUserTypeForm" method="POST">
 
-                        <!-- Case Doctor -->
-                        <div class="col-md-6">
+                        <div class="modal-body">
 
-                            <div class="mb-3">
+                            <input type="hidden" name="user_type_id" id="edit_user_type_id"
+                                value="<?php echo htmlspecialchars($row['user_type_id']); ?>">
 
-                                <label class="form-label">Case Doctor</label>
+                            <!-- User Type Name -->
+                            <div class="mb-4">
 
-                                <select class="form-select"
-                                    name="case_doctor"
-                                    id="edit_case_doctor">
+                                <label class="form-label">User Type Name</label>
 
-                                    <option value="enabled"
-                                        <?php echo ($case_doctor == 'enabled') ? 'selected' : ''; ?>>
-                                        Enabled
-                                    </option>
-
-                                    <option value="disabled"
-                                        <?php echo ($case_doctor == 'disabled') ? 'selected' : ''; ?>>
-                                        Disabled
-                                    </option>
-
-                                </select>
-
-                                <small class="form-hint">
-                                    Enable or disable case doctor access for this user type.
-                                </small>
+                                <input type="text" class="form-control" name="user_type_name" id="edit_user_type_name"
+                                    placeholder="E.g. Administrator, Veterinarian, Receptionist"
+                                    value="<?php echo htmlspecialchars($row['user_type_name']); ?>" required>
 
                             </div>
 
-                        </div>
+                            <div class="row">
 
-                        <!-- Billing Discount -->
-                        <div class="col-md-6">
+                                <!-- Case Doctor -->
+                                <div class="col-md-6">
 
-                            <div class="mb-3">
+                                    <div class="mb-3">
 
-                                <label class="form-label">Discount (%)</label>
+                                        <label class="form-label">Case Doctor</label>
 
-                                <div class="input-group">
+                                        <select class="form-select" name="case_doctor" id="edit_case_doctor">
 
-                                    <input type="text"
-                                        class="form-control"
-                                        name="billing_discount_percentage"
-                                        id="edit_billing_discount_percentage"
-                                        value="<?php echo htmlspecialchars($billing_discount); ?>"
-                                        placeholder="E.g. 10"
-                                        maxlength="3"
-                                        inputmode="numeric"
-                                        oninput="
+                                            <option value="enabled" <?php echo ($case_doctor == 'enabled') ? 'selected' : ''; ?>>
+                                                Enabled
+                                            </option>
+
+                                            <option value="disabled" <?php echo ($case_doctor == 'disabled') ? 'selected' : ''; ?>>
+                                                Disabled
+                                            </option>
+
+                                        </select>
+
+                                        <small class="form-hint">
+                                            Enable or disable case doctor access for this user type.
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Billing Discount -->
+                                <div class="col-md-6">
+
+                                    <div class="mb-3">
+
+                                        <label class="form-label">Discount (%)</label>
+
+                                        <div class="input-group">
+
+                                            <input type="text" class="form-control" name="billing_discount_percentage"
+                                                id="edit_billing_discount_percentage"
+                                                value="<?php echo htmlspecialchars($billing_discount); ?>" placeholder="E.g. 10"
+                                                maxlength="3" inputmode="numeric" oninput="
                                             this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3);
 
                                             if (this.value !== '' && parseInt(this.value, 10) > 100) {
                                                 this.value = '100';
                                             }
-                                        "
-                                        pattern="^(100|[1-9][0-9]?)$"
-                                        title="Enter a discount percentage between 1 and 100."
-                                        required>
+                                        " pattern="^(100|[1-9][0-9]?)$"
+                                                title="Enter a discount percentage between 1 and 100." required>
 
-                                    <span class="input-group-text">%</span>
+                                            <span class="input-group-text">%</span>
 
-                                </div>
+                                        </div>
 
-                                <small class="form-hint">
-                                    Enter a discount percentage between 1% and 100%.
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- User Permissions -->
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-
-                        <h4 class="mb-0">
-                            <i class="ti ti-shield-lock me-2"></i>
-                            User Permissions
-                        </h4>
-
-                        <div class="d-flex gap-2">
-
-                            <button type="button"
-                                class="btn btn-sm btn-primary"
-                                id="editSelectAllPermissions">
-                                Select All
-                            </button>
-
-                            <button type="button"
-                                class="btn btn-sm btn-outline-secondary"
-                                id="editDeselectAllPermissions">
-                                Deselect All
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <?php foreach ($permission_groups as $group_name => $group) { ?>
-
-                            <div class="col-md-6 mb-3">
-
-                                <div class="card card-gradient h-100">
-
-                                    <div class="card-header">
-
-                                        <h4 class="card-title mb-0">
-
-                                            <i class="ti <?php echo $group['icon']; ?> me-2"></i>
-
-                                            <?php echo htmlspecialchars($group_name); ?>
-
-                                        </h4>
+                                        <small class="form-hint">
+                                            Enter a discount percentage between 1% and 100%.
+                                        </small>
 
                                     </div>
 
-                                    <div class="card-body">
+                                </div>
 
-                                        <?php foreach ($group['permissions'] as $permission_name => $permission_label) {
+                            </div>
 
-                                            $checked = (
-                                                isset($row[$permission_name]) &&
-                                                $row[$permission_name] == 1
-                                            ) ? 'checked' : '';
+                            <!-- User Permissions -->
+                            <div class="d-flex justify-content-between align-items-center mb-3">
 
-                                        ?>
+                                <h4 class="mb-0">
+                                    <i class="ti ti-shield-lock me-2"></i>
+                                    User Permissions
+                                </h4>
 
-                                            <div class="form-check mb-2">
+                                <div class="d-flex gap-2">
 
-                                                <input
-                                                    class="form-check-input permission-checkbox"
-                                                    type="checkbox"
-                                                    name="<?php echo $permission_name; ?>"
-                                                    value="1"
-                                                    id="edit_<?php echo $permission_name; ?>"
-                                                    <?php echo $checked; ?>>
+                                    <button type="button" class="btn btn-sm btn-primary" id="editSelectAllPermissions">
+                                        Select All
+                                    </button>
 
-                                                <label
-                                                    class="form-check-label"
-                                                    for="edit_<?php echo $permission_name; ?>">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"
+                                        id="editDeselectAllPermissions">
+                                        Deselect All
+                                    </button>
 
-                                                    <?php echo htmlspecialchars($permission_label); ?>
+                                </div>
 
-                                                </label>
+                            </div>
+
+                            <div class="row">
+
+                                <?php foreach ($permission_groups as $group_name => $group) { ?>
+
+                                    <div class="col-md-6 mb-3">
+
+                                        <div class="card card-gradient h-100">
+
+                                            <div class="card-header">
+
+                                                <h4 class="card-title mb-0">
+
+                                                    <i class="ti <?php echo $group['icon']; ?> me-2"></i>
+
+                                                    <?php echo htmlspecialchars($group_name); ?>
+
+                                                </h4>
 
                                             </div>
 
-                                        <?php } ?>
+                                            <div class="card-body">
+
+                                                <?php foreach ($group['permissions'] as $permission_name => $permission_label) {
+
+                                                    $checked = (
+                                                        isset($row[$permission_name]) &&
+                                                        $row[$permission_name] == 1
+                                                    ) ? 'checked' : '';
+
+                                                    ?>
+
+                                                    <div class="form-check mb-2">
+
+                                                        <input class="form-check-input permission-checkbox" type="checkbox"
+                                                            name="<?php echo $permission_name; ?>" value="1"
+                                                            id="edit_<?php echo $permission_name; ?>" <?php echo $checked; ?>>
+
+                                                        <label class="form-check-label" for="edit_<?php echo $permission_name; ?>">
+
+                                                            <?php echo htmlspecialchars($permission_label); ?>
+
+                                                        </label>
+
+                                                    </div>
+
+                                                <?php } ?>
+
+                                            </div>
+
+                                        </div>
 
                                     </div>
 
-                                </div>
+                                <?php } ?>
 
                             </div>
 
-                        <?php } ?>
+                        </div>
 
-                    </div>
+                        <div class="modal-footer">
 
-                </div>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
 
-                <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">
+                                Save Changes
+                            </button>
 
-                    <button type="button"
-                        class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
-                        Cancel
-                    </button>
+                        </div>
 
-                    <button type="submit"
-                        class="btn btn-primary">
-                        Save Changes
-                    </button>
+                    </form>
 
                 </div>
 
-            </form>
+            </div>
 
         </div>
 
-    </div>
-
-</div>
-
-<?php
+        <?php
     }
 }
 ?>
 
 <script>
 
-$(document).ready(function () {
+    $(document).ready(function () {
 
-    // Toastr Settings
-    toastr.options = {
-        closeButton: true,
-        progressBar: true,
-        positionClass: "toast-top-right",
-        timeOut: 3000
-    };
+        // Toastr Settings
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 3000
+        };
 
-    // Select All Permissions
-    $('#editSelectAllPermissions').on('click', function () {
+        // Select All Permissions
+        $('#editSelectAllPermissions').on('click', function () {
 
-        $('#editUserForm .permission-checkbox').prop('checked', true);
+            $('#editUserTypeForm .permission-checkbox').prop('checked', true);
 
-    });
+        });
 
-    // Deselect All Permissions
-    $('#editDeselectAllPermissions').on('click', function () {
+        // Deselect All Permissions
+        $('#editDeselectAllPermissions').on('click', function () {
 
-        $('#editUserForm .permission-checkbox').prop('checked', false);
+            $('#editUserTypeForm .permission-checkbox').prop('checked', false);
 
-    });
+        });
 
-    // AJAX Edit User Type
-    $('#editUserForm').on('submit', function (e) {
+        // AJAX Edit User Type
+        $('#editUserTypeForm').on('submit', function (e) {
 
-        e.preventDefault();
+            e.preventDefault();
 
-        var form = $(this);
-        var btn = $('#editUserModal').find('button[type="submit"]');
+            var form = $(this);
+            var btn = $('#editUserTypeModal').find('button[type="submit"]');
 
-        var originalText = btn.html();
+            var originalText = btn.html();
 
-        btn.prop('disabled', true);
-        btn.html('<i class="ti ti-loader me-2"></i> Updating...');
+            btn.prop('disabled', true);
+            btn.html('<i class="ti ti-loader me-2"></i> Updating...');
 
-        $.ajax({
+            $.ajax({
 
-            url: './../controllers/edit_user_type_process.php',
+                url: './../controllers/edit_user_type_process.php',
 
-            type: 'POST',
+                type: 'POST',
 
-            data: form.serialize(),
+                data: form.serialize(),
 
-            dataType: 'json',
+                dataType: 'json',
 
-            success: function (response) {
+                success: function (response) {
 
-                if (response.success) {
+                    if (response.success) {
 
-                    toastr.success(response.message);
+                        toastr.success(response.message);
 
-                    // Reset form
-                    form[0].reset();
+                        // Reset form
+                        form[0].reset();
 
-                    // Close modal
-                    $('#editUserModal').modal('hide');
+                        // Close modal
+                        $('#editUserTypeModal').modal('hide');
 
-                    // Refresh users table only
-                    $('#usersTable').load(
-                        window.location.href + ' #usersTable',
-                        function () {
-                            console.log('Users table updated successfully.');
-                        }
+                        // Refresh users table only
+                        $('#usersTypeTable').load(
+                            window.location.href + ' #usersTypeTable',
+                            function () {
+                                console.log('Users table updated successfully.');
+                            }
+                        );
+
+                    } else {
+
+                        toastr.error(response.message);
+
+                    }
+
+                },
+
+                error: function (xhr, textStatus, errorThrown) {
+
+                    console.log("AJAX ERROR");
+                    console.log("HTTP Status:", xhr.status);
+                    console.log("Text Status:", textStatus);
+                    console.log("Error:", errorThrown);
+                    console.log("PHP Response:", xhr.responseText);
+
+                    toastr.error(
+                        xhr.responseText || errorThrown || "Unknown server error."
                     );
 
-                } else {
+                },
 
-                    toastr.error(response.message);
+                complete: function () {
+
+                    btn.prop('disabled', false);
+                    btn.html(originalText);
 
                 }
 
-            },
-
-            error: function (xhr, textStatus, errorThrown) {
-
-                console.log("AJAX ERROR");
-                console.log("HTTP Status:", xhr.status);
-                console.log("Text Status:", textStatus);
-                console.log("Error:", errorThrown);
-                console.log("PHP Response:", xhr.responseText);
-
-                toastr.error(
-                    xhr.responseText || errorThrown || "Unknown server error."
-                );
-
-            },
-
-            complete: function () {
-
-                btn.prop('disabled', false);
-                btn.html(originalText);
-
-            }
+            });
 
         });
 
     });
-
-});
 
 </script>

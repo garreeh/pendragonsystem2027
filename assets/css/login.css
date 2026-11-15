@@ -60,8 +60,8 @@
 /* End For Logo */
 
 /* Uncomment these for editing the width of toastr */
-
-/* #toast-container > .toast {
+#toast-container > .toast {
     width: 350px !important;
     max-width: 90vw;
-} */
+}
+
