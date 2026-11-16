@@ -134,12 +134,9 @@ if (isset($_POST['user_id'])) {
             $('#lockUserModal').modal('hide');
 
             // Refresh users table only
-            $('#usersTable').load(
-              window.location.href + ' #usersTable',
-              function () {
-                console.log('Users table updated successfully.');
-              }
-            );
+            if ($.fn.DataTable.isDataTable('#usersTable')) {
+              $('#usersTable').DataTable().ajax.reload(null, false);
+            }
 
           } else {
 

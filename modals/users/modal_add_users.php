@@ -159,12 +159,9 @@ if ($result) {
             $('#addUserModal').modal('hide');
 
             // Refresh table only
-            $('#usersTable').load(
-              window.location.href + ' #usersTable',
-              function () {
-                console.log('Users table updated successfully.');
-              }
-            );
+            if ($.fn.DataTable.isDataTable('#usersTable')) {
+              $('#usersTable').DataTable().ajax.reload(null, false);
+            }
 
           } else {
             toastr.error(response.message);

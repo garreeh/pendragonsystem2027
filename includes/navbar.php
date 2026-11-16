@@ -92,7 +92,7 @@ function isActive($pages, $current_page)
               <i class="ti ti-folder"></i>
             </span>
 
-            <span class="nav-link-title">Case</span>
+            <span class="nav-link-title">Cases</span>
           </a>
         </li>
 
@@ -134,7 +134,7 @@ function isActive($pages, $current_page)
 
         <!-- PURCHASE ORDER -->
         <li class="nav-item">
-          <a class="nav-link <?php echo isActive('purchase_order.php', $current_page); ?>" href="purchase_order.php">
+          <a class="nav-link <?php echo isActive('purchase_order.php', $current_page); ?>" href="#">
 
             <span class="nav-link-icon">
               <i class="ti ti-shopping-cart"></i>
@@ -279,8 +279,6 @@ function isActive($pages, $current_page)
 
   </div>
 </header>
-
-<?php include './../modals/modal_idle_user.php' ?>
 
 <!-- PROTECT PAGES WHEN NOT LOGGED IN -->
 <script>

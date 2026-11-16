@@ -526,12 +526,9 @@ if (isset($_POST['user_type_id'])) {
                         $('#editUserTypeModal').modal('hide');
 
                         // Refresh users table only
-                        $('#usersTypeTable').load(
-                            window.location.href + ' #usersTypeTable',
-                            function () {
-                                console.log('Users table updated successfully.');
-                            }
-                        );
+                        if ($.fn.DataTable.isDataTable('#usersTypeTable')) {
+                            $('#usersTypeTable').DataTable().ajax.reload(null, false);
+                        }
 
                     } else {
 

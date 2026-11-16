@@ -912,13 +912,10 @@
             // Close modal
             $('#addUserTypeModal').modal('hide');
 
-            // Refresh table only
-            $('#usersTypeTable').load(
-              window.location.href + ' #usersTypeTable',
-              function () {
-                console.log('Users table updated successfully.');
-              }
-            );
+            // Refresh users table only
+            if ($.fn.DataTable.isDataTable('#usersTypeTable')) {
+              $('#usersTypeTable').DataTable().ajax.reload(null, false);
+            }
 
           } else {
             toastr.error(response.message);

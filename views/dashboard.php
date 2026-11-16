@@ -140,5 +140,3 @@ include './../controllers/count_user_dashboard.php';
 </body>
 
 </html>
-
-<

@@ -22,7 +22,7 @@ if (isset($_SESSION['user_id'])) {
 
   <link rel="icon" type="image/png" href="/pendragonsystem2027/views/ico.jpg">
 
-  <title><?php echo $page_title ?? 'Pendragon System Login'; ?></title>
+  <title>Pendragon System Login</title>
 
   <link rel="stylesheet" href="assets/css/tabler.min.css">
   <link rel="stylesheet" href="assets/css/tabler-icons.min.css">
