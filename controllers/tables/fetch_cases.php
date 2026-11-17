@@ -25,8 +25,10 @@ if ($length < 1 || $length > 100) {
 
 // Search
 $search = isset($_POST['search']['value'])
-  ? mysqli_real_escape_string($conn, trim($_POST['search']['value']))
+  ? trim($_POST['search']['value'])
   : '';
+
+$searchEscaped = mysqli_real_escape_string($conn, $search);
 
 // Sorting
 $columns = array(
@@ -34,7 +36,7 @@ $columns = array(
   'c.case_date',
   'p.patient_name',
   'cl.client_firstname',
-  'p.`Attending Veterinarian`',
+  'c.attendingvet',
   'c.case_chief_complaint',
   'c.case_clinical_symptom',
   'c.case_laboratory_requested'
@@ -53,29 +55,46 @@ $orderDirection = (
   strtoupper($_POST['order'][0]['dir']) == 'ASC'
 ) ? 'ASC' : 'DESC';
 
+// Shared joins for patient and owner information
+$tables = "
+    FROM `case` c
+    LEFT JOIN patient p
+        ON c.patient_id = p.patient_id
+    LEFT JOIN client cl
+        ON p.client_id = cl.client_id
+";
+
+// Detect exact numeric Case ID search
+$isCaseIdSearch = ($search !== '' && ctype_digit($search));
+
+$caseIdSearch = 0;
+
+if ($isCaseIdSearch) {
+  $caseIdSearch = intval($search);
+}
+
 // Search condition
 $where = '';
 
-if ($search !== '') {
+if ($isCaseIdSearch) {
+
+  // Exact Case ID search
+  $where = " WHERE c.case_id = " . $caseIdSearch;
+
+} elseif ($search !== '') {
+
+  // Text search
   $where = " WHERE (
-        CAST(c.case_id AS CHAR) LIKE '%$search%'
-        OR c.case_date LIKE '%$search%'
-        OR p.patient_name LIKE '%$search%'
-        OR cl.client_firstname LIKE '%$search%'
-        OR cl.client_lastname LIKE '%$search%'
-        OR p.`Attending Veterinarian` LIKE '%$search%'
-        OR c.case_chief_complaint LIKE '%$search%'
-        OR c.case_clinical_symptom LIKE '%$search%'
-        OR c.case_laboratory_requested LIKE '%$search%'
+        c.case_date LIKE '%$searchEscaped%'
+        OR p.patient_name LIKE '%$searchEscaped%'
+        OR cl.client_firstname LIKE '%$searchEscaped%'
+        OR cl.client_lastname LIKE '%$searchEscaped%'
+        OR c.attendingvet LIKE '%$searchEscaped%'
+        OR c.case_chief_complaint LIKE '%$searchEscaped%'
+        OR c.case_clinical_symptom LIKE '%$searchEscaped%'
+        OR c.case_laboratory_requested LIKE '%$searchEscaped%'
     )";
 }
-
-// Shared table joins
-$tables = "
-    FROM `case` c
-    LEFT JOIN patient p ON c.patient_id = p.patient_id
-    LEFT JOIN client cl ON p.client_id = cl.client_id
-";
 
 // Total records
 $totalResult = mysqli_query(
@@ -83,38 +102,111 @@ $totalResult = mysqli_query(
   "SELECT COUNT(*) AS total FROM `case`"
 );
 
-$recordsTotal = intval(mysqli_fetch_assoc($totalResult)['total']);
+if (!$totalResult) {
+  error_log(mysqli_error($conn));
+  http_response_code(500);
+  echo json_encode(array('error' => 'Unable to count cases.'));
+  exit;
+}
+
+$totalRow = mysqli_fetch_assoc($totalResult);
+$recordsTotal = intval($totalRow['total']);
 
 // Filtered records
-$filteredResult = mysqli_query(
-  $conn,
-  "SELECT COUNT(*) AS total $tables $where"
-);
+if ($where === '') {
 
-$recordsFiltered = intval(mysqli_fetch_assoc($filteredResult)['total']);
+  $recordsFiltered = $recordsTotal;
+
+} else {
+
+  // Skip joins for exact Case ID search
+  if ($isCaseIdSearch) {
+
+    $filteredQuery = "
+            SELECT COUNT(*) AS total
+            FROM `case` c
+            $where
+        ";
+
+  } else {
+
+    $filteredQuery = "
+            SELECT COUNT(*) AS total
+            $tables
+            $where
+        ";
+  }
+
+  $filteredResult = mysqli_query($conn, $filteredQuery);
+
+  if (!$filteredResult) {
+    error_log(mysqli_error($conn));
+    http_response_code(500);
+    echo json_encode(array('error' => 'Unable to filter cases.'));
+    exit;
+  }
+
+  $filteredRow = mysqli_fetch_assoc($filteredResult);
+  $recordsFiltered = intval($filteredRow['total']);
+}
 
 // Fetch records
-$query = "
-    SELECT
-        c.case_id,
-        c.case_date,
-        p.patient_name,
-        CONCAT(
-            COALESCE(cl.client_firstname, ''),
-            ' ',
-            COALESCE(cl.client_lastname, '')
-        ) AS owner_name,
-        c.attendingvet AS attending_vet,
-        c.case_chief_complaint,
-        c.case_clinical_symptom,
-        c.case_laboratory_requested
+if ($isCaseIdSearch) {
 
-    $tables
-    $where
+  // Exact Case ID: retrieve case first, then related details
+  $query = "
+        SELECT
+            c.case_id,
+            c.case_date,
+            p.patient_name,
 
-    ORDER BY $orderColumn $orderDirection
-    LIMIT $start, $length
-";
+            CONCAT(
+                COALESCE(cl.client_firstname, ''),
+                ' ',
+                COALESCE(cl.client_lastname, '')
+            ) AS owner_name,
+
+            c.attendingvet AS attending_vet,
+            c.case_chief_complaint,
+            c.case_clinical_symptom,
+            c.case_laboratory_requested
+
+        $tables
+        $where
+
+        ORDER BY c.case_id $orderDirection
+
+        LIMIT $start, $length
+    ";
+
+} else {
+
+  // Normal listing and text search
+  $query = "
+        SELECT
+            c.case_id,
+            c.case_date,
+            p.patient_name, 
+
+            CONCAT(
+                COALESCE(cl.client_firstname, ''),
+                ' ',
+                COALESCE(cl.client_lastname, '')
+            ) AS owner_name,
+
+            c.attendingvet AS attending_vet,
+            c.case_chief_complaint,
+            c.case_clinical_symptom,
+            c.case_laboratory_requested
+
+        $tables
+        $where
+
+        ORDER BY $orderColumn $orderDirection
+
+        LIMIT $start, $length
+    ";
+}
 
 $result = mysqli_query($conn, $query);
 
@@ -125,17 +217,19 @@ if (!$result) {
   exit;
 }
 
+// Prepare DataTables response
 $data = array();
 
 while ($row = mysqli_fetch_assoc($result)) {
   $data[] = $row;
 }
 
-// Response
+// JSON response
 echo json_encode(array(
   'draw' => $draw,
   'recordsTotal' => $recordsTotal,
   'recordsFiltered' => $recordsFiltered,
   'data' => $data
 ));
+
 ?>

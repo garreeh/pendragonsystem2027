@@ -157,6 +157,17 @@ if (isset($_POST['user_id'])) {
 ?>
 
 <script>
+  $(document).ready(function () {
+    // Initialize Selectize only inside Edit User Modal
+    $('#editUserModal select').each(function () {
+      // Prevent duplicate initialization
+      if (!this.selectize) {
+        $(this).selectize({
+          sortField: 'text'
+        });
+      }
+    });
+  });
 
   $(document).ready(function () {
 

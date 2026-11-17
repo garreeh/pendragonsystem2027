@@ -25,8 +25,10 @@ if ($length < 1 || $length > 100) {
 
 // Search
 $search = isset($_POST['search']['value'])
-  ? mysqli_real_escape_string($conn, trim($_POST['search']['value']))
+  ? trim($_POST['search']['value'])
   : '';
+
+$searchEscaped = mysqli_real_escape_string($conn, $search);
 
 // Sorting columns
 $columns = array(
@@ -48,14 +50,29 @@ $orderDirection = (
   strtoupper($_POST['order'][0]['dir']) == 'ASC'
 ) ? 'ASC' : 'DESC';
 
+// Detect exact numeric User Type ID search
+$isIdSearch = ($search !== '' && ctype_digit($search));
+
+$idSearch = 0;
+
+if ($isIdSearch) {
+  $idSearch = intval($search);
+}
+
 // Search condition
 $where = '';
 
-if ($search !== '') {
+if ($isIdSearch) {
+
+  // Exact User Type ID search
+  $where = " WHERE user_type_id = " . $idSearch;
+
+} elseif ($search !== '') {
+
+  // Text search
   $where = " WHERE (
-        CAST(user_type_id AS CHAR) LIKE '%$search%'
-        OR user_type_name LIKE '%$search%'
-        OR case_doctor LIKE '%$search%'
+        user_type_name LIKE '%$searchEscaped%'
+        OR case_doctor LIKE '%$searchEscaped%'
     )";
 }
 
@@ -76,20 +93,29 @@ $totalRow = mysqli_fetch_assoc($totalQuery);
 $recordsTotal = intval($totalRow['total']);
 
 // Filtered records
-$filteredQuery = mysqli_query(
-  $conn,
-  "SELECT COUNT(*) AS total FROM z_user_restriction $where"
-);
+if ($where === '') {
 
-if (!$filteredQuery) {
-  error_log(mysqli_error($conn));
-  http_response_code(500);
-  echo json_encode(array('error' => 'Unable to filter user roles.'));
-  exit;
+  $recordsFiltered = $recordsTotal;
+
+} else {
+
+  $filteredQuery = mysqli_query(
+    $conn,
+    "SELECT COUNT(*) AS total
+         FROM z_user_restriction
+         $where"
+  );
+
+  if (!$filteredQuery) {
+    error_log(mysqli_error($conn));
+    http_response_code(500);
+    echo json_encode(array('error' => 'Unable to filter user roles.'));
+    exit;
+  }
+
+  $filteredRow = mysqli_fetch_assoc($filteredQuery);
+  $recordsFiltered = intval($filteredRow['total']);
 }
-
-$filteredRow = mysqli_fetch_assoc($filteredQuery);
-$recordsFiltered = intval($filteredRow['total']);
 
 // Fetch paginated user roles
 $query = "
@@ -97,9 +123,13 @@ $query = "
         user_type_id,
         user_type_name,
         COALESCE(case_doctor, 'enabled') AS case_doctor
+
     FROM z_user_restriction
+
     $where
+
     ORDER BY $orderColumn $orderDirection
+
     LIMIT $start, $length
 ";
 
@@ -112,17 +142,19 @@ if (!$result) {
   exit;
 }
 
+// Prepare DataTables response
 $data = array();
 
 while ($row = mysqli_fetch_assoc($result)) {
   $data[] = $row;
 }
 
-// DataTables response
+// JSON response
 echo json_encode(array(
   'draw' => $draw,
   'recordsTotal' => $recordsTotal,
   'recordsFiltered' => $recordsFiltered,
   'data' => $data
 ));
+
 ?>

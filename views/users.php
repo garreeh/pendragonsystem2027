@@ -121,12 +121,7 @@ if (!isset($_SESSION['user_id'])) {
 
   <!-- DATATABLES INITIALIZATION -->
   <script>
-    // Selectize Initialization
-    $(document).ready(function () {
-      $('select').selectize({
-        sortField: 'text'
-      });
-    });
+
 
     // Initialize DataTable for Users Table
     $(document).ready(function () {
@@ -211,17 +206,17 @@ if (!isset($_SESSION['user_id'])) {
             render: function (data, type, row) {
 
               var userId = Number(row.user_id);
-              var userStatus = row.user_status;
+              var clientLocked = row.client_locked;
 
               var lockButton = '';
 
-              if (userStatus == 'enabled') {
+              if (clientLocked == 'yes') {
                 lockButton =
-                  '<button type="button" class="btn btn-sm btn-outline-danger btn-lock-user" style="width: 90px;" data-user-id="' + userId + '" data-user-status="enabled">' +
+                  '<button type="button" class="btn btn-sm btn-outline-danger btn-lock-user" style="width: 90px;" data-user-id="' + userId + '" data-client-locked="yes">' +
                   '<i class="ti ti-lock me-1"></i>Lock</button>';
               } else {
                 lockButton =
-                  '<button type="button" class="btn btn-sm btn-outline-success btn-lock-user" style="width: 90px;" data-user-id="' + userId + '" data-user-status="' + $('<div>').text(userStatus).html() + '">' +
+                  '<button type="button" class="btn btn-sm btn-outline-success btn-lock-user" style="width: 90px;" data-user-id="' + userId + '" data-client-locked="' + $('<div>').text(clientLocked).html() + '">' +
                   '<i class="ti ti-lock-open me-1"></i>Unlock</button>';
               }
 
@@ -263,10 +258,7 @@ if (!isset($_SESSION['user_id'])) {
           $('#editUserModal').remove();
           $('body').append(response);
 
-          // Initialize Selectize for the edit user modal
-          $('select').selectize({
-            sortField: 'text'
-          });
+
 
           $('#editUserModal').modal('show');
 
@@ -295,11 +287,6 @@ if (!isset($_SESSION['user_id'])) {
           // console.log('Modal loaded for User Type ID:', userId);
           $('#lockUserModal').remove();
           $('body').append(response);
-
-          // Initialize Selectize for the lock user modal
-          $('select').selectize({
-            sortField: 'text'
-          });
           $('#lockUserModal').modal('show');
 
         },

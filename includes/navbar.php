@@ -98,7 +98,7 @@ function isActive($pages, $current_page)
 
         <!-- CLIENTS -->
         <li class="nav-item">
-          <a class="nav-link <?php echo isActive('client.php', $current_page); ?>" href="client.php">
+          <a class="nav-link <?php echo isActive('clients.php', $current_page); ?>" href="clients.php">
 
             <span class="nav-link-icon">
               <i class="ti ti-users"></i>
@@ -280,11 +280,207 @@ function isActive($pages, $current_page)
   </div>
 </header>
 
-<!-- PROTECT PAGES WHEN NOT LOGGED IN -->
+
 <script>
-  window.addEventListener("pageshow", function (event) {
-    if (event.persisted) {
-      window.location.reload();
+  (function () {
+    var navbar = document.querySelector('.main-navbar');
+
+    if (!navbar) {
+      console.error('[NAVBAR] CSS/HTML ERROR: Navigation not found.');
+      return;
     }
-  });
+
+    console.log('[NAVBAR] Navigation detected. Scroll script active.');
+
+    var lastScroll = window.pageYOffset;
+    var threshold = 5;
+    var ticking = false;
+
+    function handleScroll() {
+      var currentScroll = window.pageYOffset;
+      var difference = currentScroll - lastScroll;
+
+      if (currentScroll <= 10) {
+        navbar.classList.remove('navbar-hidden');
+      } else if (difference > threshold) {
+        navbar.classList.add('navbar-hidden');
+      } else if (difference < -threshold) {
+        navbar.classList.remove('navbar-hidden');
+      }
+
+      lastScroll = currentScroll;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(handleScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    window.addEventListener('pageshow', function () {
+      navbar.classList.remove('navbar-hidden');
+      lastScroll = window.pageYOffset;
+    });
+
+  })();
 </script>
+
+<style>
+  /* =================================
+   NAVBAR POSITION AND ANIMATION
+================================= */
+
+  .main-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    width: 100%;
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out;
+    will-change: transform;
+  }
+
+  /* Hide navbar when scrolling down */
+  .main-navbar.navbar-hidden {
+    transform: translateY(-100%);
+  }
+
+  /* =================================
+   NAVIGATION CONTAINER
+================================= */
+
+  .main-navbar .container-fluid {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .main-navbar .navbar-brand {
+    white-space: nowrap;
+    margin-right: 12px;
+  }
+
+  .main-navbar .navbar-nav .nav-link {
+    gap: 4px;
+  }
+
+  .main-navbar .nav-link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    margin-right: 0 !important;
+  }
+
+  .main-navbar .nav-link-icon i {
+    font-size: 16px;
+  }
+
+  /* =================================
+   DESKTOP NAVIGATION
+================================= */
+
+  @media (min-width: 1400px) {
+    .main-navbar .navbar-collapse {
+      flex-grow: 1;
+    }
+
+    .main-navbar .navbar-nav {
+      gap: 2px;
+    }
+  }
+
+  /* =================================
+   TABLET AND MOBILE NAVIGATION
+================================= */
+
+  @media (max-width: 1399.98px) {
+    .main-navbar .navbar-collapse {
+      width: 100%;
+      flex-basis: 100%;
+      max-height: calc(100vh - 75px);
+      overflow-y: auto;
+    }
+
+    .main-navbar .navbar-collapse.show {
+      display: block;
+    }
+
+    .main-navbar .navbar-collapse.collapsing {
+      overflow: hidden;
+    }
+
+    .main-navbar .navbar-collapse .navbar-nav {
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .main-navbar .navbar-collapse .nav-link {
+      padding: 10px 12px;
+    }
+
+    .main-navbar .navbar-collapse .dropdown-menu {
+      margin-left: 30px;
+    }
+  }
+
+  /* =================================
+   SMALL MOBILE
+================================= */
+
+  @media (max-width: 575.98px) {
+    .main-navbar .container-fluid {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .main-navbar .navbar-brand {
+      font-size: 16px;
+      margin-right: 5px;
+    }
+
+    .main-navbar .navbar-brand i {
+      font-size: 22px !important;
+      margin-right: 5px !important;
+    }
+
+    .main-navbar .navbar-toggler {
+      padding: 5px 8px;
+    }
+  }
+
+  /* =================================
+   LOGO
+================================= */
+
+  .brand-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15rem;
+    height: 50px;
+    padding: 5px;
+    background-color: #6d9cdb;
+    border-radius: 10px;
+  }
+
+  .brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* =================================
+   CSS WORKING INDICATOR
+================================= */
+
+  /* Green outline means navbar CSS is loaded for test */
+  /* .main-navbar {
+    outline: 2px solid limegreen;
+  } */
+
+  /* =================================
+   END OF NAVBAR CSS
+================================= */
+</style>

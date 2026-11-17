@@ -52,17 +52,37 @@ $orderDirection = (
 
 // Search condition
 $where = '';
+$isUserIdSearch = false;
+$userIdSearch = 0;
 
 if ($search !== '') {
-  $where = " WHERE (
-        CAST(user_id AS CHAR) LIKE '%$search%'
-        OR user_firstname LIKE '%$search%'
-        OR user_lastname LIKE '%$search%'
-        OR CONCAT(user_firstname, ' ', user_lastname) LIKE '%$search%'
-        OR user_name LIKE '%$search%'
-        OR user_email LIKE '%$search%'
-        OR user_status LIKE '%$search%'
-    )";
+
+  $search = trim($_POST['search']['value']);
+
+  if (ctype_digit($search)) {
+    // Exact user ID search - uses PRIMARY KEY index
+    $isUserIdSearch = true;
+    $userIdSearch = intval($search);
+
+    $where = " WHERE user_id = $userIdSearch";
+
+  } else {
+    // Text-based search
+    $searchEscaped = mysqli_real_escape_string($conn, $search);
+
+    $where = " WHERE (
+            user_firstname LIKE '%$searchEscaped%'
+            OR user_lastname LIKE '%$searchEscaped%'
+            OR CONCAT(
+                COALESCE(user_firstname, ''),
+                ' ',
+                COALESCE(user_lastname, '')
+            ) LIKE '%$searchEscaped%'
+            OR user_name LIKE '%$searchEscaped%'
+            OR user_email LIKE '%$searchEscaped%'
+            OR user_status LIKE '%$searchEscaped%'
+        )";
+  }
 }
 
 // Total records
