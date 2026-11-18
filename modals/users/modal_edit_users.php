@@ -33,7 +33,7 @@ if (isset($_POST['user_id'])) {
             </button>
           </div>
 
-          <form id="editUserTypeForm" method="POST">
+          <form id="editUserForm" method="POST">
 
             <div class="modal-body">
 
@@ -182,19 +182,19 @@ if (isset($_POST['user_id'])) {
     // Select All Permissions
     $('#editSelectAllPermissions').on('click', function () {
 
-      $('#editUserTypeForm .permission-checkbox').prop('checked', true);
+      $('#editUserForm .permission-checkbox').prop('checked', true);
 
     });
 
     // Deselect All Permissions
     $('#editDeselectAllPermissions').on('click', function () {
 
-      $('#editUserTypeForm .permission-checkbox').prop('checked', false);
+      $('#editUserForm .permission-checkbox').prop('checked', false);
 
     });
 
     // AJAX Edit User Type
-    $('#editUserTypeForm').on('submit', function (e) {
+    $('#editUserForm').on('submit', function (e) {
 
       e.preventDefault();
 

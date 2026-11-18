@@ -110,6 +110,7 @@ if (!isset($_SESSION['user_id'])) {
 
   <!-- JAVASCRIPT -->
   <?php include './../includes/js_lower.php'; ?>
+  <?php include './../modals/clients/modal_add_client.php'; ?>
 
   <script>
 
@@ -163,14 +164,12 @@ if (!isset($_SESSION['user_id'])) {
           // CLIENT FULL NAME
           {
             data: 'full_name',
-
             render: $.fn.dataTable.render.text()
           },
 
           // DATE CREATED
           {
             data: 'client_datecreated',
-
             render: $.fn.dataTable.render.text()
           },
 
@@ -243,10 +242,30 @@ if (!isset($_SESSION['user_id'])) {
 
         var clientId = $(this).data('client-id');
 
-        console.log('Selected Client ID:', clientId);
+        // For testing purposes, you can log the clientId to the console to ensure it's being captured correctly.
+        // console.log('Selected Client ID:', clientId);
 
-        // Load your Edit Client modal here.
-        // Use clientId to retrieve the selected client's information.
+        $.ajax({
+          url: './../modals/clients/modal_edit_client.php',
+          type: 'POST',
+          data: {
+            client_id: clientId
+          },
+
+          success: function (response) {
+            // console.log('Modal loaded for User Type ID:', clientId);
+            $('#editClientModal').remove();
+            $('body').append(response);
+            $('#editClientModal').modal('show');
+
+          },
+
+          error: function (xhr) {
+            console.log('AJAX Error:', xhr.status);
+            console.log(xhr.responseText);
+            toastr.error('Unable to load user role details.');
+          }
+        });
 
       });
 
@@ -269,10 +288,27 @@ if (!isset($_SESSION['user_id'])) {
 
         var clientId = $(this).data('client-id');
 
-        console.log('Selected Client ID:', clientId);
+        $.ajax({
+          url: './../modals/clients/modal_status_clients.php',
+          type: 'POST',
+          data: {
+            client_id: clientId
+          },
 
-        // Load your Delete Client confirmation modal here.
-        // Use clientId to identify the selected client.
+          success: function (response) {
+            // console.log('Modal loaded for User Type ID:', clientId);
+            $('#lockClientModal').remove();
+            $('body').append(response);
+            $('#lockClientModal').modal('show');
+
+          },
+
+          error: function (xhr) {
+            console.log('AJAX Error:', xhr.status);
+            console.log(xhr.responseText);
+            toastr.error('Unable to load user role details.');
+          }
+        });
 
       });
 

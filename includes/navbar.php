@@ -328,10 +328,7 @@ function isActive($pages, $current_page)
 </script>
 
 <style>
-  /* =================================
-   NAVBAR POSITION AND ANIMATION
-================================= */
-
+  /* NAVBAR POSITION AND ANIMATION */
   .main-navbar {
     position: sticky;
     top: 0;
@@ -347,10 +344,7 @@ function isActive($pages, $current_page)
     transform: translateY(-100%);
   }
 
-  /* =================================
-   NAVIGATION CONTAINER
-================================= */
-
+  /* NAVIGATION CONTAINER */
   .main-navbar .container-fluid {
     padding-left: 12px;
     padding-right: 12px;
@@ -377,9 +371,7 @@ function isActive($pages, $current_page)
     font-size: 16px;
   }
 
-  /* =================================
-   DESKTOP NAVIGATION
-================================= */
+  /* DESKTOP NAVIGATION */
 
   @media (min-width: 1400px) {
     .main-navbar .navbar-collapse {
@@ -391,9 +383,7 @@ function isActive($pages, $current_page)
     }
   }
 
-  /* =================================
-   TABLET AND MOBILE NAVIGATION
-================================= */
+  /* TABLET AND MOBILE NAVIGATION */
 
   @media (max-width: 1399.98px) {
     .main-navbar .navbar-collapse {
@@ -425,9 +415,7 @@ function isActive($pages, $current_page)
     }
   }
 
-  /* =================================
-   SMALL MOBILE
-================================= */
+  /* SMALL MOBILE */
 
   @media (max-width: 575.98px) {
     .main-navbar .container-fluid {
@@ -450,9 +438,7 @@ function isActive($pages, $current_page)
     }
   }
 
-  /* =================================
-   LOGO
-================================= */
+  /* LOGO */
 
   .brand-logo {
     display: inline-flex;
@@ -471,16 +457,12 @@ function isActive($pages, $current_page)
     object-fit: contain;
   }
 
-  /* =================================
-   CSS WORKING INDICATOR
-================================= */
+  /* CSS WORKING INDICATOR */
 
   /* Green outline means navbar CSS is loaded for test */
   /* .main-navbar {
     outline: 2px solid limegreen;
   } */
 
-  /* =================================
-   END OF NAVBAR CSS
-================================= */
+  /* END OF NAVBAR CSS */
 </style>
