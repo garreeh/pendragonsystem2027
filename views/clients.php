@@ -240,10 +240,19 @@ if (!isset($_SESSION['user_id'])) {
       // EDIT CLIENT BUTTON
       $(document).on('click', '.btn-edit-client', function () {
 
-        var clientId = $(this).data('client-id');
+        var editButton = $(this);
+        var originalText = editButton.html();
 
-        // For testing purposes, you can log the clientId to the console to ensure it's being captured correctly.
-        // console.log('Selected Client ID:', clientId);
+        // Prevent repeated clicks
+        if (editButton.prop('disabled')) {
+          return;
+        }
+
+        var clientId = editButton.data('client-id');
+
+        // Disable button and show loading
+        editButton.prop('disabled', true);
+        editButton.html('<i class="ti ti-loader me-2"></i> Loading...');
 
         $.ajax({
           url: './../modals/clients/modal_edit_client.php',
@@ -253,17 +262,30 @@ if (!isset($_SESSION['user_id'])) {
           },
 
           success: function (response) {
-            // console.log('Modal loaded for User Type ID:', clientId);
+
             $('#editClientModal').remove();
+
             $('body').append(response);
+
             $('#editClientModal').modal('show');
 
           },
 
           error: function (xhr) {
+
             console.log('AJAX Error:', xhr.status);
             console.log(xhr.responseText);
-            toastr.error('Unable to load user role details.');
+
+            toastr.error('Unable to load client details.');
+
+          },
+
+          complete: function () {
+
+            // Restore Edit button
+            editButton.prop('disabled', false);
+            editButton.html(originalText);
+
           }
         });
 

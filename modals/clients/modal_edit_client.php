@@ -74,12 +74,10 @@ if (isset($_POST['client_id'])) {
 
                       <!-- Client ID -->
                       <div class="mb-3">
-                        <label class="form-label">
-                          Client ID
-                        </label>
+                        <label class="form-label">Client ID</label>
 
-                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['client_id']); ?>"
-                          readonly>
+                        <input type="text" class="form-control bg-muted-lt"
+                          value="<?php echo htmlspecialchars($row['client_id']); ?>" readonly>
                       </div>
 
                       <!-- First Name -->
@@ -460,8 +458,8 @@ if (isset($_POST['client_id'])) {
             $('#editClientModal').modal('hide');
             // Refresh users table only
 
-            if ($.fn.DataTable.isDataTable('#usersTable')) {
-              $('#usersTable').DataTable().ajax.reload(null, false);
+            if ($.fn.DataTable.isDataTable('#clientTable')) {
+              $('#clientTable').DataTable().ajax.reload(null, false);
             }
           } else {
             toastr.error(response.message);
@@ -639,7 +637,7 @@ if (isset($_POST['client_id'])) {
     function validateContact(row) {
 
       var type = row.find('.contact-type').val();
-      var value = $.trim(row.find('.contact-detail').val());
+      var value = String(row.find('.contact-detail').val() || '').trim();
 
       if (value === '') {
         return false;
@@ -704,7 +702,7 @@ if (isset($_POST['client_id'])) {
         $(bodySelector).find('.contact-row').each(function () {
 
           var row = $(this);
-          var detail = $.trim(row.find('.contact-detail').val());
+          var detail = String(row.find('.contact-detail').val() || '').trim();
 
           /* Empty rows are ignored and removed */
           if (detail === '') {

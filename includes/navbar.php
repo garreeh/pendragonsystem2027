@@ -110,7 +110,7 @@ function isActive($pages, $current_page)
 
         <!-- PATIENT -->
         <li class="nav-item">
-          <a class="nav-link <?php echo isActive('patient.php', $current_page); ?>" href="patient.php">
+          <a class="nav-link <?php echo isActive('patients.php', $current_page); ?>" href="patients.php">
 
             <span class="nav-link-icon">
               <i class="ti ti-paw"></i>
